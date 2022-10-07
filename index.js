@@ -34,5 +34,5 @@ const damianMascota = damian.addMascota ("Perro")
 const countMascotas = damian.countMascotas()
 const damianLibros = damian.getBookNames()
 
-console.log (damianLibros);
+console.log (damian);
 

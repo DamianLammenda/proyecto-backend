@@ -5,7 +5,8 @@
     "nodemon": "^2.0.20"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "start:dev": "nodemon server.js"
   },
   "name": "proyecto-backend",
   "version": "1.0.0",

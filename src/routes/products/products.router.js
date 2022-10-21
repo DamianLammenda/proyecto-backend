@@ -29,7 +29,7 @@ router.get("/:id", (req, res) => {
 router.post("/", (req, res) => {
   try  {
     const product = {...req.body,  id: products.length + 1 };
-    products.push(product);
+    products.push(product,`Product Added:`,new Date().toLocaleDateString());
     res.redirect("/public/index.html");
   } catch (error) {
     res.status(500).json({ message: error.message });

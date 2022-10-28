@@ -12,7 +12,7 @@ router.get("/", (_req, res) => {
   try {
     res.status(200).json(products);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error)
   }
 });
 
@@ -22,7 +22,7 @@ router.get("/:id", (req, res) => {
     const productFound = products.find((p) => p.id === parseInt(id));
     (!productFound) ? res.status(404).json({ message: "Product not found" }) : res.status(200).json(productFound);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error)
   }
 });
 
@@ -32,7 +32,7 @@ router.post("/", (req, res) => {
     products.push(product,`Product Added:`,new Date().toLocaleDateString());
     res.redirect("/public/index.html");
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error)
   }
 });
 
@@ -50,7 +50,7 @@ router.put("/:id", (req, res) => {
         message: `Product updated successfully`,
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error)
   }
 });
 
@@ -60,7 +60,7 @@ router.delete("/:id", (req, res) => {
     const deleteProduct = products.find((p) => p.id === parseInt(id));
     (!deleteProduct) ? res.status(404).json({ message: "Product not found" }) : res.status(200).json(`The product ${deleteProduct.name} has been deleted`);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error)
   }
 });
 

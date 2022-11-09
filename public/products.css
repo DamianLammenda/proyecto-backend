@@ -1,0 +1,27 @@
+#name,
+#price,
+#img {
+    text-align: center;
+}
+
+ul li {
+    list-style-type: none;
+}
+
+.date {
+    color: brown;
+    font-size: 0.8rem;
+    font-weight: 300
+}
+
+.username {
+    color: blue;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.message {
+    color: green;
+    font-style: italic;
+    font-size: 1rem;
+}

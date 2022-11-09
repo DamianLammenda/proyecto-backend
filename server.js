@@ -1,6 +1,25 @@
 const app = require("./app");
-const PORT = process.env.PORT || 3004;
+const { Server: HttpServer } = require("http");
+const { Server: IoServer } = require("socket.io");
+require("dotenv").config();
 
-app.listen(PORT, () => {
-  console.log(`Servidor escuchando en el puerto ${PORT}`);
+const PORT = process.env.PORT || 3000;
+
+const http = new HttpServer(app);
+const io = new IoServer(http);
+
+let messages = [];
+
+io.on("connection", (socket) => {
+  console.log("a user connected");
+  socket.emit("update-messages", messages);
+  socket.on("new-message", (message) => {
+    messages.push(message);
+    io.emit("messages", messages);
+    io.sockets.emit("new-messages-from-server", message);
+  });
+});
+
+http.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
 });

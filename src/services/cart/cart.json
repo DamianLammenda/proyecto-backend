@@ -1,0 +1,20 @@
+[
+	{
+		"name": "heladera",
+		"price": 45666,
+		"details": "prueba de ",
+		"uuid": "7dca14a2-7d6b-4f16-889a-6e6723f01fb5",
+		"description": "heladera nueva",
+		"stock": 500,
+		"thumbnail": "https://cdn-icons-png.flaticon.com/512/329/329759.png"
+	},
+	{
+		"name": "prueba nuevemil",
+		"price": 666,
+		"details": "prueba de ",
+		"thumbnail": "https://cdn-icons-png.flaticon.com/128/8891/8891365.png",
+		"stock": 120,
+		"uuid": "bc71ae98-71c7-4b8c-a5c9-6cc2a955a5a3",
+		"timestamp": 1668523899085
+	}
+]

@@ -16,5 +16,14 @@
 		"stock": 120,
 		"uuid": "bc71ae98-71c7-4b8c-a5c9-6cc2a955a5a3",
 		"timestamp": 1668523899085
+	},
+	{
+		"name": "Ultima prueba",
+		"price": 184,
+		"details": "ultima prueba",
+		"thumbnail": "https://cdn-icons-png.flaticon.com/128/8891/8891365.png",
+		"stock": 56,
+		"uuid": "0b1a1f59-24d3-4bad-82ed-3956d641ceba",
+		"timestamp": 1668526373985
 	}
 ]

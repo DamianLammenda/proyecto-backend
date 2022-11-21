@@ -83,7 +83,7 @@ class Products {
       );
       await fs.promises.writeFile(
         __dirname + "/products.json",
-        JSON.stringify(productsUpdated, null, "\t")
+        JSON.stringify(productsUpdated, null, 2)
       );
       return {
         success: true,

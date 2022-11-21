@@ -5,21 +5,24 @@ const { v4: uuidv4 } = require("uuid");
 class Cart {
   constructor() {}
 
-  async createProduct(data) {
+  async createCart() {
     try {
-        const product = { ...data };
-        Object.assign(product, { uuid: uuidv4() });
-        Object.assign(product, { timestamp: Date.now() });
-        const products = await fs.promises.readFile(
-        __dirname + "/cart.json", "utf-8" );
-        const productsParsed = JSON.parse(products);
-        productsParsed.push(product);
-        await fs.promises.writeFile(
-        __dirname + "/cart.json", JSON.stringify(productsParsed, null, "\t") );
-    
+      const cart = { products: [] };
+      Object.assign(cart, { uuid: uuidv4() });
+      Object.assign(cart, { timestamp: Date.now() });
+      const carts = await fs.promises.readFile(
+        __dirname + "/cart.json",
+        "utf-8"
+      );
+      const cartsParsed = JSON.parse(carts);
+      cartsParsed.push(cart);
+      await fs.promises.writeFile(
+        __dirname + "/cart.json",
+        JSON.stringify(cartsParsed, null, 2)
+      );
       return {
         success: true,
-        message: `Product created successfully`,
+        data: cart.uuid,
       };
     } catch (error) {
       console.error(error);
@@ -30,7 +33,7 @@ class Cart {
     }
   }
 
-  async getProducts() {
+  async getCarts() {
     try {
       const data = await fs.promises.readFile(
         __dirname + "/cart.json",
@@ -49,17 +52,17 @@ class Cart {
     }
   }
 
-  async getProduct(uuid) {
+  async getCart(uuid) {
     try {
-      const product = await fs.promises.readFile(
+      const cart = await fs.promises.readFile(
         __dirname + "/cart.json",
         "utf-8"
       );
-      const products = JSON.parse(product);
-      let productFound = products.find((p) => p.uuid == uuid);
+      const carts = JSON.parse(cart);
+      let cartFound = carts.find((p) => p.uuid == uuid);
       return {
         success: true,
-        data: productFound,
+        data: cartFound,
       };
     } catch (error) {
       console.error(error);
@@ -70,50 +73,56 @@ class Cart {
     }
   }
 
-  async updateProduct(uuid, data) {
+  async updateCart(uuid, data) {
     try {
-      const product = await fs.promises.readFile(
+      const cart = await fs.promises.readFile(
         __dirname + "/cart.json",
         "utf-8"
       );
-      const products = JSON.parse(product);
-      const productsUpdated = products.map((p) =>
+      const carts = JSON.parse(cart);
+      const cartsUpdated = carts.map((p) =>
         p.uuid == uuid ? { ...p, ...data } : p
       );
       await fs.promises.writeFile(
         __dirname + "/cart.json",
-        JSON.stringify(productsUpdated, null, "\t")
+        JSON.stringify(cartsUpdated, null, 2)
       );
-      return {
-        success: true,
-        message: `The product with the ID: ${uuid} has been updated successfully`,
-      };
+      return cartsUpdated;
     } catch (error) {
-      console.error(error);
-      return {
-        success: false,
-        message: error.message,
-      };
+      throw error;
     }
   }
 
-  async deleteProduct(uuid) {
+  async deleteCart(uuid) {
     try {
-      const product = await fs.promises.readFile(
+      const cart = await fs.promises.readFile(
         __dirname + "/cart.json",
         "utf-8"
       );
-      const products = JSON.parse(product);
-      const productsFiltered = products.filter((p) => p.uuid !== uuid);
+      const carts = JSON.parse(cart);
+      const cartsFiltered = carts.filter((p) => p.uuid !== uuid);
       await fs.promises.writeFile(
         __dirname + "/cart.json",
-        JSON.stringify(productsFiltered, null, "\t")
+        JSON.stringify(cartsFiltered, null, 2)
       );
       return {
         success: true,
         message: `The product with the ID: ${uuid} has been deleted successfully`,
       };
     } catch (error) {
+      console.error(error);
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
+  }
+  async deleteProductCart (cartId, productId) {
+    try {
+      const cart = await this.getCart(cartId);
+      cart.products = cart.products.filter((p) => p.uuid !== productId);
+      await this.updateCart(cartId, cart);
+    }catch (error) {
       console.error(error);
       return {
         success: false,

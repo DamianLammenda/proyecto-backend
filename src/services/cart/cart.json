@@ -1,29 +1,34 @@
 [
-	{
-		"name": "heladera",
-		"price": 45666,
-		"details": "prueba de ",
-		"uuid": "7dca14a2-7d6b-4f16-889a-6e6723f01fb5",
-		"description": "heladera nueva",
-		"stock": 500,
-		"thumbnail": "https://cdn-icons-png.flaticon.com/512/329/329759.png"
-	},
-	{
-		"name": "prueba nuevemil",
-		"price": 666,
-		"details": "prueba de ",
-		"thumbnail": "https://cdn-icons-png.flaticon.com/128/8891/8891365.png",
-		"stock": 120,
-		"uuid": "bc71ae98-71c7-4b8c-a5c9-6cc2a955a5a3",
-		"timestamp": 1668523899085
-	},
-	{
-		"name": "Ultima prueba",
-		"price": 184,
-		"details": "ultima prueba",
-		"thumbnail": "https://cdn-icons-png.flaticon.com/128/8891/8891365.png",
-		"stock": 56,
-		"uuid": "0b1a1f59-24d3-4bad-82ed-3956d641ceba",
-		"timestamp": 1668526373985
-	}
+  {
+    "products": [
+      {
+        "success": true,
+        "data": {
+          "name": "prueba 4",
+          "price": 45698,
+          "uuid": "318f2218-d97d-4c92-802a-7b3ab4368d17"
+        }
+      },
+      {
+        "success": true,
+        "data": {
+          "name": "prueba 98999",
+          "price": 78777,
+          "details": "prueba de detalle",
+          "uuid": "eb95f175-fd85-455a-9d60-13f6be94f833"
+        }
+      },
+      {
+        "success": true,
+        "data": {
+          "name": "prueba 98999",
+          "price": 78777,
+          "details": "prueba de detalle",
+          "uuid": "eb95f175-fd85-455a-9d60-13f6be94f833"
+        }
+      }
+    ],
+    "uuid": "1a8ffd09-3656-4092-b7d6-f9c255c5a57f",
+    "timestamp": 1668883816779
+  }
 ]

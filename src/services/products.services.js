@@ -1,28 +1,103 @@
-//inicializa el array con un producto de ejemplo.
-//Comentar los ejemplos para visualizar el alert del error.
-let products = [
-  {
-    name: "Bitcoin",
-    price: 20000,
-    thumbnail:
-      "https://cdn4.iconfinder.com/data/icons/crypto-currency-and-coin-2/256/bitcoincash_bch_bitcoin-64.png",
-  },
-  {
-    name: "Ethereum",
-    price: 1500,
-    thumbnail:"https://cdn4.iconfinder.com/data/icons/crypto-currency-and-coin-2/256/etherium_eth_ethcoin_crypto-64.png"
-  }
-];
+const knexConfig = require("../database/config");
+const knex = require("knex");
+const { v4: uuidv4 } = require("uuid");
 
 //class de productos
 class Products {
-  constructor() {}
-  getproduct() {
-    return products;
+  constructor() {
+    this.knex = knex(knexConfig);
   }
-  saveProduct(product) {
-    products.push(product);
-    return products;
+  async saveProduct(product) {
+    Object.assign(product, { id: uuidv4() });
+    return new Promise((resolve, reject) => {
+      this.knex("products")
+        .insert(product)
+        .then(() => {
+          resolve({
+            success: true,
+            data: product,
+          });
+        })
+        .catch((err) => reject(err));
+    });
+  }
+  async getProduct(id) {
+    try {
+      const product = await this.knex("products")
+        .where("id", "=", id)
+        .select("*");
+      if (!product) {
+        return {
+          success: false,
+          error: "Product not found",
+        };
+      }
+      const productFormated = JSON.parse(JSON.stringify(product));
+      return {
+        success: true,
+        data: productFormated,
+      };
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getProducts() {
+    try {
+      const products = await this.knex("products").select("*");
+      if (!products) {
+        return {
+          success: false,
+          error: "Products not found",
+        };
+      }
+      const productsFormated = JSON.parse(JSON.stringify(products));
+      return {
+        success: true,
+        data: productsFormated,
+      };
+    } catch (error) {
+      next(error);
+    }
+  }
+ 
+  async deleteProduct(id) {
+    try {
+      const product = await this.knex("products")
+        .where("id", "=", id)
+        .del();
+      if (!product) {
+        return {
+          success: false,
+          error: "Product not found",
+        };
+      }
+      return {
+        success: true,
+        data: product,
+      };
+    } catch (error) {
+      next(error);
+    }
+  }
+  async updateProduct(id, product) {
+    try {
+      const productUpdated = await this.knex("products")
+        .where("id", "=", id)
+        .update(product);
+      if (!productUpdated) {
+        return {
+          success: false,
+          error: "Product not found",
+        };
+      }
+      return {
+        success: true,
+        data: productUpdated,
+      };
+    } catch (error) {
+      next(error);
+    }
   }
 }
 module.exports = Products;

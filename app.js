@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(logger("dev"));
 app.use(express.static(__dirname + "/public"));
 app.use("/public", express.static(__dirname + "/public/form/"));
-app.use("/", indexRouter);
+app.use("/api", indexRouter);
 app.set("view engine", "ejs");
 app.set("views", __dirname + "/src/views/pages");
 app.use(errorHandler);

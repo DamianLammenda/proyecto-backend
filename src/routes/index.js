@@ -10,6 +10,6 @@ router.get("/health", (_req, res) => {
   });
 });
 
-router.use("/", products);
+router.use("/products", products);
 
 module.exports = router;

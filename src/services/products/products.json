@@ -1,0 +1,24 @@
+[
+	{
+		"name": "prueba123",
+		"price": 443534568,
+		"uuid": "06018178-d7d9-4c58-aab2-9d3eef367431"
+	},
+	{
+		"name": "prueba 4",
+		"price": 45698,
+		"uuid": "318f2218-d97d-4c92-802a-7b3ab4368d17"
+	},
+	{
+		"name": "prueba 98999",
+		"price": 78777,
+		"details": "prueba de detalle",
+		"uuid": "eb95f175-fd85-455a-9d60-13f6be94f833"
+	},
+	{
+		"name": "prueba 1299",
+		"price": 78777,
+		"details": "prueba de ",
+		"uuid": "fb0a421b-7971-4fcd-a7ff-4efaa92477a0"
+	}
+]

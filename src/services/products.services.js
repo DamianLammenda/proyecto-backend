@@ -38,7 +38,7 @@ class Products {
         data: productFormated,
       };
     } catch (error) {
-      next(error);
+      console.error(error);
     }
   }
 
@@ -57,7 +57,7 @@ class Products {
         data: productsFormated,
       };
     } catch (error) {
-      next(error);
+     console.error(error);
     }
   }
  
@@ -77,7 +77,7 @@ class Products {
         data: product,
       };
     } catch (error) {
-      next(error);
+      console.error(error);
     }
   }
   async updateProduct(id, product) {
@@ -96,7 +96,7 @@ class Products {
         data: productUpdated,
       };
     } catch (error) {
-      next(error);
+      console.error(error);
     }
   }
 }

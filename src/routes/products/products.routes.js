@@ -1,7 +1,8 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const { v4: uuidv4 } = require("uuid");
-const Products = require("../../services/products/products.services");
+import { v4 as uuidv4 } from "uuid";
+import Products from "../../services/products/products.services.js";
+//const Products = require("../../services/products/products.services");
 const products = new Products();
 
 router.get("/", async (_req, res, next) => {
@@ -73,4 +74,4 @@ router.delete("/:uuid", async (req, res, next) => {
   }
 });
 
-module.exports = router;
+export default router;

@@ -1,20 +1,40 @@
-const express = require("express");
-const indexRouter = require("./src/routes/index");
-require("dotenv").config();
-const logger = require("morgan");
-const app = express();
-const errorHandler = require("./src/middlewares/errorHandlers");
-require("ejs");
+import express from "express";
+import _ from "lodash";
+import logger from "morgan";
 
-//settings
+import { Server as HttpServer } from "http";
+import { Server as IoServer } from "socket.io";
+
+import indexRouter from "./src/routes/index.js";
+import errorHandler from "./src/middlewares/errorHandlers.js";
+
+import dotenv, { config } from "dotenv";
+dotenv.config();
+import { getDirName } from "./utils.js";
+
+const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger("dev"));
-//app.use(express.static(__dirname + "/public"));
-//app.use("/public", express.static(__dirname + "/public/form/"));
+
+const http = new HttpServer(app);
+const io = new IoServer(http);
+
+app.use(express.static(getDirName() + "/public"));
+
 app.use("/api", indexRouter);
-//app.set("view engine", "ejs");
-//app.set("views", __dirname + "/src/views/pages");
+
+app.get("/", (_req, res) => {
+  res.sendFile("index", { root: getDirName() });
+});
 app.use(errorHandler);
 
-module.exports = app;
+// const PORT = process.env.PORT || 3000;
+// http.listen(PORT, () => console.info(`Server up and running on port ${PORT}`));
+
+// io.on('connection', socket => {
+//     console.log(socket);
+//     console.log('nuevo cliente socket conectado')
+// })
+
+export default http;

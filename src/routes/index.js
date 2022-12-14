@@ -1,7 +1,9 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const products = require("./products/products.routes");
-const cart = require("./cart/cart.routes");
+import products from "../routes/products/products.routes.js";
+// const products = require("./products/products.routes");
+import cart from "./cart/cart.routes.js";
+//const cart = require("./cart/cart.routes");
 
 //status
 router.get("/health", (_req, res) => {
@@ -16,4 +18,4 @@ router.use("/cart", cart);
 
 
 
-module.exports = router;
+export default router;

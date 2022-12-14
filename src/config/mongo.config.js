@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 mongoose.set("debug", true);
 mongoose.set("strictQuery", false);
@@ -25,10 +25,10 @@ const mongoConnect = async () => {
       useNewURLParser: true,
       useUnifiedTopology: true,
     });
-    console.info("MONGODB CONNECTED");
+    console.info(`Connected to Mongodb with the user ${MONGO_USER}`);
   } catch (err) {
-    throw new Error(err);
+    console.error(err);
   }
 };
 
-module.exports = mongoConnect;
+export default mongoConnect;

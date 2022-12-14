@@ -1,8 +1,8 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const { v4: uuidv4 } = require("uuid");
-const Cart = require("../../services/cart/cart.services");
-const Products = require("../../services/products/products.services");
+import { v4 as uuidv4 } from "uuid";
+import Cart from "../../services/cart/cart.services.js";
+import Products from "../../services/products/products.services.js";
 const cartService = new Cart();
 const productService = new Products();
 
@@ -80,4 +80,4 @@ router.delete("/:uuid/products/:uuid_prod", async (req, res, next) => {
   }
 });
 
-module.exports = router;
+export default router;

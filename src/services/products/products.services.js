@@ -1,4 +1,4 @@
-const fs = require("fs");
+import fs from "fs";
 
 //class de productos
 class Products {
@@ -123,4 +123,4 @@ class Products {
     }
   }
 }
-module.exports = Products;
+export default Products;

@@ -1,126 +1,62 @@
 import fs from "fs";
+import { getDirName } from "../../../utils.js";
 
 //class de productos
 class Products {
-  constructor() {}
+  constructor() {
+    this.path = getDirName() + "/src/services/products/products.json";
+  }
 
   async createProduct(data) {
-    try {
-      let product = await fs.promises.readFile(
-        __dirname + "/products.json",
-        "utf-8"
-      );
-      const productsObject = JSON.parse(product);
-      productsObject.push(data);
-      await fs.promises.writeFile(
-        __dirname + "/products.json",
-        JSON.stringify(productsObject),
-        null,
-        2
-      );
-      return {
-        success: true,
-        message: `Product created successfully`,
-      };
-    } catch (error) {
-      console.error(error);
-      return {
-        success: false,
-        message: error.message,
-      };
-    }
+    let product = await fs.promises.readFile(this.path, "utf-8");
+    const productsObject = JSON.parse(product);
+    productsObject.push(data);
+    await fs.promises.writeFile(
+      this.path,
+      JSON.stringify(productsObject),
+      null,
+      2
+    );
+    return data;
   }
 
   async getProducts() {
-    try {
-      const data = await fs.promises.readFile(
-        __dirname + "/products.json",
-        "utf-8"
-      );
-      return {
-        success: true,
-        data: JSON.parse(data),
-      };
-    } catch (error) {
-      console.error(error);
-      return {
-        success: false,
-        message: error.message,
-      };
-    }
+    const data = await fs.promises.readFile(this.path, "utf-8");
+    return JSON.parse(data);
   }
 
   async getProduct(uuid) {
-    try {
-      const product = await fs.promises.readFile(
-        __dirname + "/products.json",
-        "utf-8"
-      );
-      const products = JSON.parse(product);
-      let productFound = products.find((p) => p.uuid == uuid);
-      return {
-        success: true,
-        data: productFound,
-      };
-    } catch (error) {
-      console.error(error);
-      return {
-        success: false,
-        message: error.message,
-      };
-    }
+    const product = await fs.promises.readFile(this.path, "utf-8");
+    const products = JSON.parse(product);
+    let productFound = products.find((p) => p.uuid == uuid);
+    return productFound;
   }
 
   async updateProduct(uuid, data) {
-    try {
-      const product = await fs.promises.readFile(
-        __dirname + "/products.json",
-        "utf-8"
-      );
-      const products = JSON.parse(product);
-      const productsUpdated = products.map((p) =>
-        p.uuid == uuid ? { ...p, ...data } : p
-      );
-      await fs.promises.writeFile(
-        __dirname + "/products.json",
-        JSON.stringify(productsUpdated, null, 2)
-      );
-      return {
-        success: true,
-        message: `The product with the ID: ${uuid} has been updated successfully`,
-      };
-    } catch (error) {
-      console.error(error);
-      return {
-        success: false,
-        message: error.message,
-      };
-    }
+    const products = await this.getProducts();
+    let productUpdated;
+    const productsUpdated = products.map((p) => {
+      if (p.uuid === uuid) {
+        productUpdated = { ...p, ...data };
+        return productUpdated;
+      }
+      return p;
+    });
+    await fs.promises.writeFile(
+      this.path,
+      JSON.stringify(productsUpdated, null, 2)
+    );
+    return productUpdated;
   }
 
   async deleteProduct(uuid) {
-    try {
-      const product = await fs.promises.readFile(
-        __dirname + "/products.json",
-        "utf-8"
-      );
-      const products = JSON.parse(product);
-      const productsFiltered = products.filter((p) => p.uuid !== uuid);
-      await fs.promises.writeFile(
-        __dirname + "/products.json",
-        JSON.stringify(productsFiltered, null, "\t")
-      );
-      return {
-        success: true,
-        message: `The product with the ID: ${uuid} has been deleted successfully`,
-      };
-    } catch (error) {
-      console.error(error);
-      return {
-        success: false,
-        message: error.message,
-      };
-    }
+    const product = await fs.promises.readFile(this.path, "utf-8");
+    const products = JSON.parse(product);
+    const productsFiltered = products.filter((p) => p.uuid !== uuid);
+    await fs.promises.writeFile(
+      this.path,
+      JSON.stringify(productsFiltered, null, "\t")
+    );
   }
 }
 export default Products;

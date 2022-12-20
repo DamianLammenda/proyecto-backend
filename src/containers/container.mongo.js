@@ -5,42 +5,18 @@ class ContainerMongo {
   contructor(model) {
     this.model = model;
   }
-  async save(data) {
-    try {
-      const objet = await new this.model(data);
-      return objet.save();
-    } catch (err) {
-      console.error(err);
-      return {
-        success: true,
-        message: err.message,
-      };
-    }
+  async create(data) {
+    const objet = await this.model.create(data);
+    return objet;
   }
   async getAll() {
-    try {
-      const data = await this.model.find({});
-      return data;
-    } catch (err) {
-      console.error(err);
-      return {
-        success: true,
-        message: err.message,
-      };
-    }
+    const data = await this.model.find({});
+    return data;
   }
   async getById(id) {
-    try {
-      const data = await this.model.findById(id);
-      if (isNil(data) || isNull(data)) throw new Error("item not found");
-      return data;
-    } catch (err) {
-      console.error(err);
-      return {
-        success: true,
-        message: err.message,
-      };
-    }
+    const data = await this.model.findById(id);
+    if (_.isNil(data) || _.isNull(data)) throw new Error("item not found");
+    return data;
   }
 
   async updateById(id, data) {
@@ -50,23 +26,14 @@ class ContainerMongo {
       });
       return dataUpdated;
     } catch (err) {
-      console.error(err);
-      return {
-        success: true,
-        message: err.message,
-      };
+      throw new Error("item not found");
     }
   }
   async deleteById(id) {
     try {
-      const data = await this.model.findByIdAndDelete(id);
-      return data;
+      await this.model.findByIdAndDelete(id);
     } catch (err) {
-      console.error(err);
-      return {
-        success: true,
-        message: err.message,
-      };
+      console.error(err.message)
     }
   }
 }

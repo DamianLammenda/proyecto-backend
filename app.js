@@ -11,8 +11,10 @@ import errorHandler from "./src/middlewares/errorHandlers.js";
 import dotenv, { config } from "dotenv";
 dotenv.config();
 import { getDirName } from "./utils.js";
+import clientRouter from "./src/routes/client/index.js";
 
 const app = express();
+app.set('view engine', 'ejs')
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(logger("dev"));
@@ -22,19 +24,10 @@ const io = new IoServer(http);
 
 app.use(express.static(getDirName() + "/public"));
 
+app.use('/', clientRouter)
 app.use("/api", indexRouter);
 
-app.get("/", (_req, res) => {
-  res.sendFile("index", { root: getDirName() });
-});
+
 app.use(errorHandler);
-
-// const PORT = process.env.PORT || 3000;
-// http.listen(PORT, () => console.info(`Server up and running on port ${PORT}`));
-
-// io.on('connection', socket => {
-//     console.log(socket);
-//     console.log('nuevo cliente socket conectado')
-// })
 
 export default http;

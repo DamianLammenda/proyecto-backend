@@ -8,9 +8,7 @@ const products = new Products();
 router.get("/", async (_req, res, next) => {
   try {
     const data = await products.getProducts();
-    !data
-      ? res.status(404).json({ message: "Product not found" })
-      : res.status(200).json(data);
+    res.status(200).json({ success: true, data });
   } catch (error) {
     next(error);
   }
@@ -21,8 +19,8 @@ router.get("/:uuid", async (req, res, next) => {
     const { uuid } = req.params;
     const data = await products.getProduct(uuid);
     !data
-      ? res.status(404).json({ message: "Product not found" })
-      : res.status(200).json(data);
+      ? res.status(404).json({ success: false, message: "Product not found" })
+      : res.status(200).json({ success: true, data });
   } catch (error) {
     next(error);
   }
@@ -33,9 +31,7 @@ router.post("/", async (req, res, next) => {
     const product = { ...req.body };
     Object.assign(product, { uuid: uuidv4() });
     const data = await products.createProduct(product);
-    !data
-      ? res.status(404).json({ message: "Product not found" })
-      : res.status(200).json(data);
+    res.status(201).json({ success: true, data });
   } catch (error) {
     next(error);
   }
@@ -45,9 +41,10 @@ router.put("/:uuid", async (req, res, next) => {
   try {
     const { uuid } = req.params;
     const data = await products.updateProduct(uuid, req.body);
-    !uuid
-      ? res.status(404).json({ message: "Product not found" })
+    !data
+      ? res.status(404).json({ success: false, message: "Product not found" })
       : res.status(200).json({
+          success: true,
           data,
           message: `The product with the ID: ${uuid} has been updated successfully`,
         });
@@ -59,16 +56,8 @@ router.put("/:uuid", async (req, res, next) => {
 router.delete("/:uuid", async (req, res, next) => {
   try {
     const { uuid } = req.params;
-    !uuid
-      ? res.status(404).json({ message: "Product not found" })
-      : res
-          .status(200)
-          .json({
-              success: true,
-              message: `The product with the ID: ${uuid} has been deleted successfully`,
-          }
-          );
-    products.deleteProduct(uuid);
+    await products.deleteProduct(uuid);
+    res.status(204).send();
   } catch (error) {
     next(error);
   }

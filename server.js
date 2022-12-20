@@ -1,15 +1,17 @@
-//import app
 import http from "./app.js";
+import mongoConnect from "./src/config/mongo.config.js";
 
-//Descomentar abajo para probar la conexión a mongo
+if (process.env.DATACORE === "MONGO") {
+  (async () => {
+    await mongoConnect();
+  })();
+}
 
-//import mongoConnect from './src/config/mongo.config.js';
-// mongoConnect();
-
-//Descomentar abajo para probar la conexión a firebase
-
-// import app from "./src/config/firebase.config.js";
-// app;
+if (process.env.DATACORE === "FIREBASE") {
+  (async () => {
+    await import("./src/config/firebase.config.js");
+  })();
+}
 
 const PORT = process.env.PORT || 3000;
 

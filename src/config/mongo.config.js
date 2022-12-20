@@ -16,7 +16,7 @@ const mongoConnect = async () => {
   const MONGO_HOST = process.env.MONGO_HOST;
 
   if (!MONGO_USER) {
-    MONGO_URI = `${process.env.MONGO_URI}/${MONGO_DB_NAME}`;
+    MONGO_URI = `${process.env.MONGO_URI}`;
   } else {
     MONGO_URI = `mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_HOST}/${MONGO_DB_NAME}?${MONGO_QUERY}`;
   }
@@ -24,6 +24,7 @@ const mongoConnect = async () => {
     await mongoose.connect(MONGO_URI, {
       useNewURLParser: true,
       useUnifiedTopology: true,
+      dbName: MONGO_DB_NAME
     });
     console.info(`Connected to Mongodb with the user ${MONGO_USER}`);
   } catch (err) {

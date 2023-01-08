@@ -1,20 +1,84 @@
-const express = require("express");
-const indexRouter = require("./src/routes/index");
-require("dotenv").config();
-const logger = require("morgan");
-const app = express();
-const errorHandler = require("./src/middlewares/errorHandlers");
-require("ejs");
+const express = require('express');
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+require('dotenv').config();
 
-//settings
+const mongooseConnect = require('./src/services/mongo/connect');
+
+const md5 = require('md5');
+
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+
+const UserModel = require('./src/services/mongo/models/user.model');
+
+const { getStoreConfig } = require('./src/services/session/session.config');
+const indexRouter = require('./src/routes/index');
+
+const app = express();
+
+const COOKIE_SECRET = process.env.COOKIE_SECRET || 'default';
+
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(logger("dev"));
-app.use(express.static(__dirname + "/public"));
-app.use("/public", express.static(__dirname + "/public/form/"));
-app.use("/", indexRouter);
-app.set("view engine", "ejs");
-app.set("views", __dirname + "/src/views/pages");
-app.use(errorHandler);
+app.use(express.urlencoded({extended: true}));
+app.use(logger('tiny'));
+
+mongooseConnect();
+
+app.use(cookieParser(COOKIE_SECRET));
+
+app.use(session({
+    store: MongoStore.create(getStoreConfig()),
+    secret: COOKIE_SECRET,
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: false,
+        secure: false
+    }
+}));
+
+app.set('view engine', 'ejs');
+app.set('views', './views');
+
+passport.use('login', new LocalStrategy(async (username, password, done) => {
+    const userData = await UserModel.findOne({username, password: md5(password)});
+    if(!userData){
+        return done(null, false);
+    }
+    done(null, userData);
+}));
+
+passport.use('signup', new LocalStrategy({
+    passReqToCallback: true
+}, async (req, username, password, done) => {
+    const userData = await UserModel.findOne({username, password: md5(password)});
+    if(userData){
+        return done(null, false);
+    }
+    const stageUser = new UserModel({
+        username,
+        password: md5(password),
+        fullName: req.body.fullName
+    });
+    const newUser = await stageUser.save();
+    done(null, newUser);
+}));
+
+passport.serializeUser((user, done) => {
+    done(null, user._id);
+});
+
+passport.deserializeUser(async (id, done) => {
+    const userData = await UserModel.findById(id);
+    done(null, userData);
+});
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(indexRouter);
 
 module.exports = app;

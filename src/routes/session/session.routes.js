@@ -21,11 +21,10 @@ router.get('/signout', (req, res) => {
     })
 });
 
-router.get('/datos', authMiddleware, (req, res) => {
-    res.status(200).json({
-        success: true,
-        data: req.session,
-    })
-})
+router.get('/viewProducts', authMiddleware, async (req, res) => {
+    const userData = req.user;
+    res.render('viewProducts', {fullName: userData.fullName});
+});
+
 
 module.exports = router;

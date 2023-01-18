@@ -19,13 +19,17 @@
     <title>Products</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
       integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <link rel="stylesheet" href="/products.css">
+    <link rel="stylesheet" href='./styles/products.css'>
   </head>
 
   <body style="background-color: rgb(16, 14, 12)">
-    <h1> Bienvenido <%= fullName %>
-    </h1>
-    <a href="/api/signout" class="btn btn-success" mt-2>Salir</a>
+    <div class="d-flex justify-content-end me-5 ">      
+        <h1 class="text-success-emphasis"> Bienvenido <%= fullName %>
+        </h1>
+      </div>
+    <div class="d-flex justify-content-end me-5 ">       
+      <a href="/api/signout" class="btn btn-success" mt-2>Salir</a>
+      </div>
 
     <h1 class="text-center mt-5 text-white font-monospace text-capitalize">You can add the product of you want</h1>
 

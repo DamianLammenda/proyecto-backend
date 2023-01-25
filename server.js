@@ -1,25 +1,18 @@
-const app = require("./app");
-const { Server: HttpServer } = require("http");
-const { Server: IoServer } = require("socket.io");
-require("dotenv").config();
+import http from "./app.js";
+import mongoConnect from "./src/config/mongo.config.js";
+
+if (process.env.DATACORE === "MONGO") {
+  (async () => {
+    await mongoConnect();
+  })();
+}
+
+if (process.env.DATACORE === "FIREBASE") {
+  (async () => {
+    await import("./src/config/firebase.config.js");
+  })();
+}
 
 const PORT = process.env.PORT || 3000;
 
-const http = new HttpServer(app);
-const io = new IoServer(http);
-
-let messages = [];
-
-io.on("connection", (socket) => {
-  console.log("a user connected");
-  socket.emit("update-messages", messages);
-  socket.on("new-message", (message) => {
-    messages.push(message);
-    io.emit("messages", messages);
-    io.sockets.emit("new-messages-from-server", message);
-  });
-});
-
-http.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
-});
+http.listen(PORT, () => console.info(`server up and running on port: ${PORT}`));
